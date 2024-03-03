@@ -1,31 +1,711 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.8.34511.84
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "практическая №8(2)", "практическая №8(2)\практическая №8(2).vcxproj", "{C9070B3C-68E4-435F-BFA8-9A735F2CF700}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
-		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C9070B3C-68E4-435F-BFA8-9A735F2CF700}.Debug|x64.ActiveCfg = Debug|x64
-		{C9070B3C-68E4-435F-BFA8-9A735F2CF700}.Debug|x64.Build.0 = Debug|x64
-		{C9070B3C-68E4-435F-BFA8-9A735F2CF700}.Debug|x86.ActiveCfg = Debug|Win32
-		{C9070B3C-68E4-435F-BFA8-9A735F2CF700}.Debug|x86.Build.0 = Debug|Win32
-		{C9070B3C-68E4-435F-BFA8-9A735F2CF700}.Release|x64.ActiveCfg = Release|x64
-		{C9070B3C-68E4-435F-BFA8-9A735F2CF700}.Release|x64.Build.0 = Release|x64
-		{C9070B3C-68E4-435F-BFA8-9A735F2CF700}.Release|x86.ActiveCfg = Release|Win32
-		{C9070B3C-68E4-435F-BFA8-9A735F2CF700}.Release|x86.Build.0 = Release|Win32
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {8EF69DAA-0996-4150-84AF-27B0422DCCA4}
-	EndGlobalSection
-EndGlobal
+#include <iostream>
+#include <vector>
+#include <string>
+#include <limits>
+#include <conio.h>
+#include <iterator>
+#include <algorithm>
+#include <fstream>
+#include <Windows.h>
+#include <stdlib.h>
+#include <map>
+#include <set>
+
+using namespace std;
+
+//СТРУКТУРА
+struct apartamens
+{
+    string fio;
+    string address;
+    int komnats;
+    int ploshad;
+    int etag;
+    bool balkon;
+};
+
+vector<apartamens> database;
+
+//Добавление записей
+void createRecord()
+{
+    float y, y2;
+    char chr;
+    char ch;
+    apartamens newapartamens;
+    while (true)
+    {
+        cout << "Фамилия Имя Отчество: ";
+        cin.ignore();
+        getline(cin, newapartamens.fio);
+        bool validName = true;
+        for (int i = 0; i < newapartamens.fio.length(); i++)
+        {
+            if (!isalpha((unsigned char)newapartamens.fio[i]) && !isspace((unsigned char)newapartamens.fio[i]))
+            {
+                cout << "Строка содержит сторонние символы, нужно вводить только буквы" << endl;
+                validName = false;
+                break;
+            }
+        }
+        if (validName)
+        {
+            break;
+        }
+    }
+    while (true)
+    {
+
+        cout << "Адрес: ";
+        getline(cin, newapartamens.address);
+            if (newapartamens.address == "")
+            {
+                cout << "Строка содержит пробел, нужно вводить только буквы и цифры" << endl;
+                cin.clear();
+                getline(cin, newapartamens.address);
+            }
+        bool validAdres = true;
+        for (int i = 0; i < newapartamens.address.length(); i++)
+        {
+            if (!isalpha((unsigned char)newapartamens.address[i]) && !isalnum((unsigned char)newapartamens.address[i]) && !isspace((unsigned char)newapartamens.address[i]))
+            {
+                cout << "Строка содержит сторонние символы, нужно вводить только буквы и цифры" << endl;
+                validAdres = false;
+                break;
+            }
+        }
+        if (validAdres)
+        {
+            break;
+        }
+    }
+    while (true)
+    {
+        cout << "Комнаты: ";
+       
+        do
+        {
+            cin >> y;
+            cin.get(chr);
+            if ((int)y != y)
+            {
+                cout << "Некоректный ввод. Введите число."<< endl;
+                cin.clear();
+                cin.ignore();
+            }
+            else if (y <= 0)
+            {
+                cout << "Некоректный ввод. Введите число." << endl;
+                cin.clear();
+                cin.ignore();
+            }
+            else if (!cin.good())
+            {
+                cout << "Некоректный ввод. Введите число." << endl;
+                cin.clear();
+                cin.ignore();
+            } 
+            else if (chr == ',')
+            {
+                cout << "Некоректный ввод. Введите число." << endl;
+                cin.clear();
+                cin >> y2;
+            }
+            else
+            {
+                y2 = y;
+                newapartamens.komnats = (int)y;
+                break;
+            }
+            
+        } while (true);
+
+        break;
+    }
+ 
+    while (true)
+    {
+        cout << "Площадь: ";
+        do
+        {
+            cin >> y;
+            cin.get(chr);
+            if ((int)y != y)
+            {
+                cout << "Ошибка, введите ещё раз" << endl;
+                cin.clear();
+                cin.ignore();
+            }
+            else if (!cin.good())
+            {
+                cout << "Вы ввели букву, а надо число" << endl;
+                cin.clear();
+                cin.ignore();
+
+            }
+            else if (y <= 0)
+            {
+                cout << "Вы ввели не то число: " << endl;
+                cin.clear();
+                cin.ignore();
+            }
+            else if (chr == ',')
+            {
+                cout << "Некоректный ввод. Введите число." << endl;
+                cin.clear();
+                cin >> y2;
+            }
+            else
+            {
+                y2 = y;
+                newapartamens.ploshad = (int)y;
+                break;
+            }
+        } while (true);
+
+        break;
+    }
+    while (true)
+    {
+        cout << "Этаж: ";
+        do
+        {
+            cin >> y;
+            cin.get(chr);
+            if ((int)y != y)
+            {
+                cout << "Ошибка, введите ещё раз" << endl;
+                cin.clear();
+                cin.ignore();
+            }
+            else if (!cin.good())
+            {
+                cout << "Вы ввели букву, а надо число" << endl;
+                cin.clear();
+                cin.ignore();
+
+            }
+            else if (y <= 0)
+            {
+                cout << "Вы ввели не то число: " << endl;
+                cin.clear();
+                cin.ignore();
+            }
+            else if (chr == ',')
+            {
+                cout << "Некоректный ввод. Введите число." << endl;
+                cin.clear();
+                cin >> y2;
+            }
+            else
+            {
+                y2 = y;
+                newapartamens.etag = (int)y;
+                break;
+            }
+        } while (true);
+
+        break;
+    }
+    while (true)
+    {
+        cout << "Наличие балкон(0-нету, 1-есть): ";
+        do
+        {
+            cin >> y;
+            cin.get(chr);
+            if ((y != 0 && y != 1))
+            {
+                cout << "Неверный ввод. Введите 0 или 1." << endl;
+                cin.clear();
+                cin.ignore();
+            }
+            else if (!cin.good()) 
+            {
+                cout << "Неверный ввод. Введите 0 или 1." << endl;
+                cin.clear();
+                cin.ignore();
+            }
+            else if (chr == ',')
+            {
+                cout << "Некоректный ввод. Введите число." << endl;
+                cin.clear();
+                cin >> y2;
+            }
+            else
+            {
+                y2 = y;
+                newapartamens.balkon = (y == 1);
+                break;
+            }
+        } while (true);
+        
+        break;
+    }
+    database.push_back(newapartamens);
+}
+
+//поиск записей по реквезиту
+void searchRecord()
+{
+    string name;
+    cout << "Введите имя для поиска: ";
+    cin.ignore();
+    getline(cin, name);
+    string::size_type loc = name.find(name, 0);//поиск сроки по первой букве
+
+    //Приводим к нижнему регистру
+    transform(name.begin(), name.end(), name.begin(), tolower);
+    
+    vector<int> matchingentry;
+   
+    for (int i = 0; i < database.size(); i++) 
+    {
+        // Привести имя из базы данных к нижнему регистру
+        string dataName = database[i].fio;
+        transform(dataName.begin(), dataName.end(), dataName.begin(), ::tolower);
+        if (database[i].fio.find(name) != string::npos) 
+        {
+            matchingentry.push_back(i);
+        }
+    }
+    // Преобразуем введенное имя в нижний регистр
+    transform(name.begin(), name.end(), name.begin(), ::tolower);
+    bool found = false;
+
+    for (int i = 0; i < database.size(); i++)
+    {
+        //Привести имя из базы данных к нижему регистру
+        string databaseName = database[i].fio;
+        transform(databaseName.begin(), databaseName.end(), databaseName.begin(), tolower);
+        
+
+        if (databaseName.find(name) != string::npos)
+        {
+            cout << "Запись найдена: " << endl;
+            cout << "Фамилия имя отчество: " << database[i].fio << endl;
+            cout << "Адрес: " << database[i].address << endl;
+            cout << "Комнаты: " << database[i].komnats << endl;
+            cout << "Площадь: " << database[i].ploshad << endl;
+            cout << "Этаж: " << database[i].etag << endl;
+            cout << "Наличие балкон: " << database[i].balkon << endl << endl;
+            found = true;
+        }
+        else if (!found) 
+        {
+            cout << "Не найдено записи с указанными символами\n";
+        }
+
+    }
+}
+
+//изменение записи
+void modifyRecord() 
+{
+    cout << "Введите имя записи, которую хотите изменить: ";
+    cin.ignore();
+    float z;
+    string name, initials, temporaryAddress;
+    int choice;
+    getline(cin, name);
+    
+    // Привести введенное имя к нижнему регистру
+    transform(name.begin(), name.end(), name.begin(), ::tolower);
+
+    vector<int> matchingentry;
+
+    for (int i = 0; i < database.size(); i++) 
+    {
+        string dataName = database[i].fio;
+        transform(dataName.begin(), dataName.end(), dataName.begin(), ::tolower);
+        if(dataName.find(name) != string::npos)
+        {
+            matchingentry.push_back(i);     //добавление элементов в вектор
+        }
+    }
+    
+    if (matchingentry.empty()) 
+    {
+        cout << "Записи с данным именем не найдены." << endl;
+        return;
+    }
+    else if (matchingentry.size() > 1) 
+    {
+        cout << "Найдено несколько похожих записей. Выберите id записи, которую хотите изменить:"<<endl;
+        for (int index : matchingentry) 
+        {
+            cout << "ID: " << index << endl
+            << "Name: " << database[index].fio << endl;
+        }
+        
+        do
+        {
+            int id;
+            cout << "Введите id записи, которую хотите изменить: ";
+            cin >> id;
+
+            if (id < 0 || id >= database.size() ||
+                find(matchingentry.begin(), matchingentry.end(), id) == matchingentry.end())
+            {
+                cout << "Некорректный id записи. Введите ещё раз." << endl;
+            }
+            else
+            {
+                break;
+            }
+
+        matchingentry = { id };
+        } while (true);
+    }
+    
+    for (int index : matchingentry)
+    {
+       int choice;
+        do {
+            cout << "Выберите номер поля для изменения: " << endl;
+            cout << "1: изменить имя" << endl;
+            cout << "2: изменить адрес" << endl;
+            cout << "3: изменить количество комнат" << endl;
+            cout << "4: изменить площадь" << endl;
+            cout << "5: изменить этаж" << endl;
+            cout << "6: изменить наличие балкона" << endl;
+            cout << "7: прекратить изменение(вернуться в главное меню)" << endl;
+
+            cin >> choice;
+            cin.ignore();
+
+            if (choice == 7) 
+            {
+              break;
+            }
+
+            switch (choice) 
+            {
+            case 1:
+                while (true)
+                {
+                    cout << "Введите новое имя: ";
+                    getline(cin, initials);
+                    bool validName = true;
+                    for (int i = 0; i < initials.length(); i++)
+                    {
+                        if (!isalpha((unsigned char)initials[i]) && !isspace((unsigned char)initials[i]))
+                        {
+                            cout << "Строка содержит сторонние символы, нужно вводить только буквы" << endl;
+                            validName = false;
+                            break;
+                        }
+                    }
+                    if (validName)
+                    {
+                        database[index].fio = initials;
+                        break;
+                    }
+                }
+                break;
+            case 2:
+                while (true)
+                {
+                    cout << "Введите новый адрес: ";
+                    getline(cin, temporaryAddress);
+                    bool validName = true;
+                    for (int i = 0; i < temporaryAddress.length(); i++)
+                    {
+                        if (!isalpha((unsigned char)temporaryAddress[i]) && !isalnum((unsigned char)temporaryAddress[i]) && !isspace((unsigned char)temporaryAddress[i]))
+                        {
+                            cout << "Строка содержит сторонние символы, нужно вводить только буквы" << endl;
+                            validName = false;
+                            break;
+                        }
+                    }
+                    if (validName)
+                    {
+                        database[index].address = temporaryAddress;
+                        break;
+                    }
+                }
+                break;
+            case 3:
+                cout << "Введите новое количество комнат: ";
+
+                do
+                {
+                    cin >> z;
+
+                    if ((int)z != z)
+                    {
+                        cout << "Ошибка, введите ещё раз" << endl;
+                        cin.clear();
+                        cin.ignore();
+                    }
+                    else if (!cin.good())
+                    {
+                        cout << "Вы ввели букву, а надо число" << endl;
+                        cin.clear();
+                        cin.ignore();
+
+                    }
+                    else if (z <= 0)
+                    {
+                        cout << "Вы ввели не то число: " << endl;
+                        cin.clear();
+                        cin.ignore();
+                    }
+                    else
+                    {
+                        database[index].komnats = (int)z;
+                        break;
+                    }
+                } while (true);
+                cin.ignore();
+                break;
+            case 4:
+                cout << "Введите новую площадь: ";
+                do
+                {
+                    cin >> z;
+                    if ((int)z != z)
+                    {
+                        cout << "Ошибка, введите ещё раз" << endl;
+                        cin.clear();
+                        cin.ignore();
+                    }
+                    else if (!cin.good())
+                    {
+                        cout << "Вы ввели букву, а надо число" << endl;
+                        cin.clear();
+                        cin.ignore();
+
+                    }
+                    else if (z <= 0)
+                    {
+                        cout << "Вы ввели не то число: " << endl;
+                        cin.clear();
+                        cin.ignore();
+                    }
+                    else
+                    {
+                        database[index].ploshad = (int)z;
+                        break;
+                    }
+                } while (true);
+                cin.ignore();
+                break;
+            case 5:
+                cout << "Введите новый этаж: ";
+                do
+                {
+                    cin >> z;
+                    if ((int)z != z)
+                    {
+                        cout << "Ошибка, введите ещё раз" << endl;
+                        cin.clear();
+                        cin.ignore();
+                    }
+                    else if (!cin.good())
+                    {
+                        cout << "Вы ввели букву, а надо число" << endl;
+                        cin.clear();
+                        cin.ignore();
+
+                    }
+                    else if (z <= 0)
+                    {
+                        cout << "Вы ввели не то число: " << endl;
+                        cin.clear();
+                        cin.ignore();
+                    }
+                    else
+                    {
+                        database[index].etag = (int)z;
+                        break;
+                    }
+                } while (true);
+                cin.ignore();
+                break;
+            case 6:
+                cout << "Есть ли балкон? (1 - да, 0 - нет): ";
+                cin >> database[index].balkon;
+                do
+                {
+                    cin >> z;
+                    if ((z != 0 && z != 1))
+                    {
+                        cout << "Неверный ввод. Введите 0 или 1." << endl;
+                        cin.clear();
+                        cin.ignore();
+                    }
+                    else if (!cin.good())
+                    {
+                        cout << "Неверный ввод. Введите 0 или 1." << endl;
+                        cin.clear();
+                        cin.ignore();
+                    }
+                    else
+                    {
+                        database[index].balkon = (z == 1);
+                        break;
+                    }
+                } while (true);
+                cin.ignore();
+                break;
+            default:
+                cout << "Некорректный ввод. Пожалуйста, введите число от 1 до 7."<<endl;
+                break;
+            }
+        } while (choice >= 1 && choice <= 7);
+    }
+} 
+
+//Удаление записи
+void deleteRecords()
+{
+    string name;
+    cout << "Введите имя записи которую хотите удалить: ";
+    cin.ignore();
+    getline(cin, name);
+    //Приводим к нижнему регистру
+    transform(name.begin(), name.end(), name.begin(), ::tolower);
+
+    vector<int> matchingentry;
+
+    for (int i = 0; i < database.size(); i++)
+    {
+        string dataName = database[i].fio;
+        transform(dataName.begin(), dataName.end(), dataName.begin(), ::tolower);
+        if (dataName.find(name, 0) != string::npos)
+        {
+            matchingentry.push_back(i);     //добавление элементов в вектор
+        }
+    }
+    if (matchingentry.empty())
+    {
+        cout << "Записи с данным именем не найдены." << endl;
+        return;
+    }
+    else if (matchingentry.size() > 1) 
+    {
+        cout << "Найдено несколько похожих записей. Выберите id записи, которую хотите удалить:"<<endl;
+
+        for (int index : matchingentry) 
+        {
+            cout << "ID: " << index << endl
+                << "Name: " << database[index].fio << endl;
+        }
+        do {
+            int id;
+            cout << "Введите id записи, которую хотите удалить: ";
+            cin >> id;
+
+            auto it = find(matchingentry.begin(), matchingentry.end(), id); // автоматический ввод данных и поиск элементов
+            if (it == matchingentry.end())
+            {
+                cout << "Некорректный id записи. Удаление отменено." << endl;
+            }
+            else
+            {
+                break;
+            }
+        database.erase(database.begin() + *it);    
+        } while (true);                     
+    }
+    
+    cout << "Запись успешно удалена." << endl << endl;
+}
+
+//Вывод всех записей
+void listALLRecords()
+{
+    cout << "\t\t\t\t\tКаточки квартир: " << endl << endl;
+    for (int i = 0; i < database.size(); i++)
+    {
+        cout << "Фамилия имя отчество: " << database[i].fio << endl;
+        cout << "Адрес: " << database[i].address << endl;
+        cout << "Комнаты: " << database[i].komnats << endl;
+        cout << "Площадь: " << database[i].ploshad << endl;
+        cout << "Этаж: " << database[i].etag << endl;
+        cout << "Наличие балкон: " << database[i].balkon << endl << endl;
+    }
+}
+
+int main()
+{
+    setlocale(LC_ALL, "rus");
+    SetConsoleOutputCP(1251);
+    SetConsoleCP(1251);
+    cout << "\t\t\t\t\tПрактическая №7" << endl;
+    cout << "\t\t\t\t\tКазков Егор" << endl;
+    cout << "\t\t\t\t\tВыберете пункт меню:" << endl;
+    cout << "1. Добавление записи" << endl
+        << "2. Поиск по основному реквизиту" << endl
+        << "3. Изменение записи" << endl
+        << "4. Удаление записи" << endl
+        << "5. Отчёт" << endl
+        << "6. Выход" << endl
+        << ">>> ";
+   
+    bool While = true;
+    int choice;
+    float x;
+    while (While)
+    {
+        do
+        {
+            cin >> x;
+
+            if ((int)x != x)
+            {
+                cout << "Ошибка, введите ещё раз" << endl;
+                cin.clear();
+                cin.ignore();
+            }
+            else if (!cin.good())
+            {
+                cout << "Вы ввели букву, а надо число" << endl;
+                cin.clear();
+                cin.ignore();
+
+            }
+            else if (x <= 0)
+            {
+                cout << "Вы ввели не то число: " << endl;
+                cin.clear();
+                cin.ignore();
+            }
+            else
+            {
+                choice = (int)x;
+                break;
+            }
+        } while (true);
+        switch (choice)
+        {
+        case 1:
+            createRecord();
+            cout << "Ввод пункта меню: " << endl;
+            break;
+        case 2:
+            searchRecord();
+            cout << "Ввод пункта меню: " << endl;
+            break;
+        case 3:
+            modifyRecord();
+            cout << "Ввод пункта меню: " << endl;
+            break;
+        case 4:
+            deleteRecords();
+            cout << "Ввод пункта меню: " << endl;
+            break;
+        case 5:
+            listALLRecords();
+            cout << "Ввод пункта меню: " << endl;
+            break;
+        case 6:
+            While = false;
+            break;
+        default:
+            cout << "Ошибка. Введите число от 1 до 6." << endl;
+        }
+    }
+    return 0;
+}
