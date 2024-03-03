@@ -31,7 +31,6 @@ void createRecord()
 {
     float y, y2;
     char chr;
-    char ch;
     apartamens newapartamens;
     while (true)
     {
