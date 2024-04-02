@@ -1,0 +1,197 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <Windows.h>
+
+using namespace std;
+
+struct students{
+	string fio;
+	int course;
+	string group;
+	int appraisal;
+};
+
+vector <students> database;
+
+void createRecord()
+{
+	students newstudents;
+
+	float y;
+	int choice;
+	while (true)
+	{
+		cout << "Фамилия Имя: ";
+		getline(cin >> ws, newstudents.fio);
+		bool validName = true;
+		for (int i = 0; i < newstudents.fio.length(); i++)
+		{
+			if (!isalpha((unsigned char)newstudents.fio[i]) && !isspace((unsigned char)newstudents.fio[i]))
+			{
+				cout << "Строка содержит сторонрие символы! Нужно вводить только буквы." << endl;
+				validName = false;
+				break;
+			}
+		}
+		if (validName)
+		{
+			break;
+		}
+	}
+	while (true)
+	{
+		cout << "Группа: ";
+		getline(cin, newstudents.group);
+		bool validGroup = true;
+		for (int i = 0; i < newstudents.group.length(); i++)
+		{
+			if (!isalpha((unsigned char)newstudents.group[i]) && !isalnum((unsigned char)newstudents.group[i]))
+			{
+				cout << "Строка содержит сторонние символы! нужно вводить только числа и буквы" << endl;
+				validGroup = false;
+				break;
+			}
+		}
+		if (validGroup)
+		{	
+			break;
+		}
+	}
+	while (true)
+	{
+		cout << "Курс: ";
+		do {
+			cin >> y;
+			if ((int)y != y)
+			{
+				cout << "Некоректный ввод. Введите число." << endl;
+				cin.clear();
+				cin.ignore();
+			}
+			else if (!cin.good())
+			{
+				cout << "Некоректный ввод. Введите число." << endl;
+				cin.clear();
+				cin.ignore();
+			}
+			else if (y <= 0)
+			{
+				cout << "Некоректный ввод. Введите число." << endl;
+				cin.clear();
+				cin.ignore();
+			}
+			else if (y > 5)
+			{
+				cout << "Некоректный ввод. Введите число." << endl;
+				cin.clear();
+				cin.ignore();
+			}
+			else
+			{
+				newstudents.course = (int)y;
+				break;
+			}
+		} while (true);
+		break;
+	}
+	while (true)
+	{
+		cout << "Оценка в сессии: ";
+		do {
+			cin >> y;
+			if ((int)y != y)
+			{
+				cout << "Некоректный ввод. Введите число" << endl;
+				cin.clear();
+				cin.ignore();
+			}
+			else if (!cin.good())
+			{
+				cout << "Некоректный ввод. Введите число" << endl;
+				cin.clear();
+				cin.ignore();
+			}
+			else if (y <= 0)
+			{
+				cout << "Некоректный ввод. Введите число" << endl;
+				cin.clear();
+				cin.ignore();
+			}
+			else if (y > 5)
+			{
+				cout << "Некоректный ввод. Введите число." << endl;
+				cin.clear();
+				cin.ignore();
+			}
+			else
+			{
+				newstudents.appraisal = (int)y;
+				break;
+			}
+		} while (true);
+		
+		break;
+	}
+	database.push_back(newstudents);
+}
+	
+int main()
+{
+	float count = 0, result;
+	float fir = 0;
+	float t = 0;
+	int choice;
+	setlocale(LC_ALL, "rus");
+	SetConsoleOutputCP(1251);
+	SetConsoleCP(1251);
+	string path = "myFile.txt";
+	ofstream fileOut; //создание объекта
+	fileOut.open(path); //вызов метода объекта
+	if (!fileOut.is_open())
+	{
+		cout << "ошибка открытия файла!" << endl;
+	}
+	do{
+		createRecord();
+		cout << "Если хотите ввести ещё одну запись введите 1, иначе введите любое другое число" << endl;
+		cin >> choice;
+	} while (choice == 1);
+
+	cout << "\t\t\t\t\tСтуденты" << endl;
+	for (int i = 0; i < database.size(); i++)
+	{
+		cout << "Фамилия Имя: " << database[i].fio << endl;
+		cout << "Группа: " << database[i].group << endl;
+		cout << "Курс: " << database[i].course << endl;
+		cout << "Оценка за сессию: " << database[i].appraisal << endl << endl;	
+
+		if (database[i].course == 1 && database[i].appraisal == 5)
+		{
+			fileOut << "Фамилия Имя: " << database[i].fio << endl;
+			fileOut << "Оценка за сессию: " << database[i].appraisal << endl << endl;
+			t++;
+		}
+	}
+	
+	for (int i = 0; i < database.size(); i++){
+		if (database[i].appraisal == 5)
+		{
+			count++;
+		}
+		
+	}
+	if (count > 0)
+	{
+		result = t * 100 / count;
+		fileOut << "Доля первокурсников отличников от общего кол-во отличников:" << result << "%" << endl;
+	}
+	else
+		{
+			fileOut << "Отличников нету" << endl;
+		}
+	fileOut.close();
+	return 0;
+
+}
